@@ -4,7 +4,10 @@ import com.example.entity.Employee;
 import com.example.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -17,25 +20,15 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping("/public")
-    public String welcomeMessage(){
-        return "Welcome to Spring Boot Application";
-    }
-
-    @PostMapping("/create")
-    public Employee createEmployee(@RequestBody Employee employee){
-        return employeeService.createEmployee(employee);
-    }
-
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('ROLE_HR') or hasAnyAuthority('ROLE_MANAGER')")
-    public List<Employee> getAllEmployees(){
-        return employeeService.getEmployees();
+    public List<Employee> getAllEmployees() {
+        return employeeService.getAllEmployees();
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_EMPLOYEE')")
-    public Employee getEmployeeById(@PathVariable Long id){
-        return employeeService.getEmployeeById(id);
+    public Employee getEmployee(@PathVariable Long id) {
+        return employeeService.getEmployee(id);
     }
 }
